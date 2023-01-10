@@ -1,0 +1,58 @@
+<!-- Add operation form -->
+<div class="miniContainer">
+    <form (ngSubmit)="onAdd()" #myForm="ngForm">
+        <div>
+            <label for="accountNum">Account number:</label>
+            <input name="accountNumber" title="account" #accountNumber="ngModel" [(ngModel)]="newOperation.accountNumber" required min="1000" max="10000" class="form-control" type="number" />
+            <span *ngIf="accountNumber.errors && accountNumber.touched">
+                <span *ngIf="accountNumber.errors['required']">Missing Account Number</span>
+                <span *ngIf="accountNumber.errors['min'] || accountNumber.errors['max']">Account Number should be 4 digits</span>
+            </span>
+        </div>
+      
+        <div>
+            <label for="operationType">Operation Type: </label>
+            <select class="form-select" title="type" #operationType="ngModel" required name="operationType" [(ngModel)]="newOperation.operationTypeId">
+                <option selected value="">Select operation:</option>
+                <option *ngFor="let t of operationTypes" [value]="t.operationTypeId">{{t.operationTypeName}}</option>
+            </select>
+            <span *ngIf="operationType.errors && operationType.touched">
+                <span *ngIf="operationType.errors['required']">Missing operation Type</span>
+            </span>
+        </div>
+        
+        <div>
+            <label for="amount">Amount: </label>
+            <input title="amount"type="number" #amount="ngModel" min=100 max="10000" required class="form-control" name="amount" [(ngModel)]="newOperation.amount" placeholder="$">
+            <span *ngIf="amount.errors && amount.touched">
+                <span *ngIf="amount.errors['required']" >Missing Amount</span>
+                <span *ngIf="amount.errors['min']">Amount must be more than 100</span>
+                <span *ngIf="amount.errors['max']">Amount must be less than 10,000</span>
+            </span>
+        </div>
+
+    
+        <div *ngIf="newOperation.operationTypeId==3">
+            <label for="interest">Interest: </label>
+            <input #interest="ngModel" title="interest" min="5" max="50" required type="number" class="form-control" name="interest" [(ngModel)]="newOperation.interest" placeholder="%">
+            <span *ngIf="interest.errors && interest.touched">
+                <span *ngIf="interest.errors['required']">Missing interest</span>
+                <span *ngIf="interest.errors['min']">Min limit is 5%</span>
+                <span *ngIf="interest.errors['max']">Max limit is 50%</span>
+            </span><br/>
+        </div>
+
+        <div *ngIf="newOperation.operationTypeId==3">
+            <label for="payments">Payments: </label>
+            <input #payments="ngModel" title="payments" min="0" max="20" required type="number" class="form-control" name="payments" [(ngModel)]="newOperation.payments" placeholder="1-20">
+            <span *ngIf="payments.errors && payments.touched">
+                <span *ngIf="payments.errors['required']">Missing payments</span>
+                <span *ngIf="payments.errors['min']">Invalid number</span>
+                <span *ngIf="payments.errors['max']">Maximum payments is 20</span>
+            </span>
+        </div>
+  
+    <button class="btn btn-warning" [disabled]="myForm.invalid" type="submit">Save</button>
+
+</form>
+</div>

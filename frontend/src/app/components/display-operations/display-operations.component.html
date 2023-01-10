@@ -1,0 +1,35 @@
+
+<!-- Account input with clear & show buttons -->
+<div class="miniContainer">
+    <label for="accountNum">Enter your account number:</label>
+    <input #accountInput="ngModel" [(ngModel)]="accountId" required min="1000" max="10000" class="form-control" id="accountNum" placeholder="write here..." type="number" autofocus (input)="clearBoard()"/>
+    <span class="inputMessage" *ngIf="accountInput.errors && accountInput.dirty">
+        <span *ngIf="accountInput.errors['required']">Missing Account Number</span>
+        <span *ngIf="accountInput.errors['min'] || accountInput.errors['max']">Account Number should be 4 digits only</span>
+      </span><br/>
+    <button type="submit" class="btn btn-primary" (click)="getOperations()" [disabled]="accountInput.invalid">Show!</button>
+    <button class="btn btn-warning" [disabled]="accountInput.invalid" type="reset" (click)="clear()">Clear</button>
+</div>
+
+
+<!-- display operations with cards/Info Message -->
+<div class="miniContainer">
+<p class="infoM" *ngIf="infoMessage">{{infoMessage}}</p>
+<div class="cardsContainer" *ngIf="myOperations">
+  <div class="card" *ngFor="let o of myOperations" >
+     <i *ngIf="o.operationTypeName=='deposit'" class="bi bi-cash-coin"></i>
+     <i *ngIf="o.operationTypeName=='withdrawal'" class="bi bi-piggy-bank"></i>
+     <i *ngIf="o.operationTypeName=='loan'" class="bi bi-wallet-fill"></i>
+    <h5 class="card-title">{{o.operationTypeName | uppercase}} (#{{o.objectId}}) </h5>
+    <h6 class="card-subtitle mb-2 text-muted">Account #{{o.accountNumber}}</h6>
+    <div class="card-body">
+    <p>Amount: {{o.amount}}$</p>
+    <p>Date: {{o.operationDate | convertDate}}</p>
+    <p *ngIf="o.interest">Interest: {{o.interest}}%</p>
+    <p *ngIf="o.payments">Payments: {{o.payments}}</p>
+  </div>
+  </div>
+
+</div>
+</div>
+
